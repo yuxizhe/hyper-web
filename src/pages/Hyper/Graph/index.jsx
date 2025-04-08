@@ -9,14 +9,12 @@ const colors = [
   '#F08F56',
   '#D580FF',
   '#FF3D00',
-  '#FF2D00',
-  '#FF1D00',
-  '#FF0D00',
-  '#FF0000',
-  '#FF0D00',
-  '#FF1D00',
-  '#FF2D00',
-  '#FF3D00',]
+  '#16f69c',
+  '#004ac9',
+  '#f056d1',
+  '#a680ff',
+  '#c8ff00',
+]
 
 export default () => {
   const [data, setData] = useState(undefined);
@@ -57,20 +55,36 @@ export default () => {
           labelPadding: 2,
           labelBackgroundFill: baseColor,
           labelBackgroundRadius: 5,
+          labelPlacement: 'button',
+          labelAutoRotate: false,
+          // bubblesets
+          maxRoutingIterations: 100,
+          maxMarchingIterations: 20,
+          pixelGroup: 4,
+          edgeR0: 10,
+          edgeR1: 60,
+          nodeR0: 15,
+          nodeR1: 50,
+          morphBuffer: 10,
+          threshold: 1,
+          memberInfluenceFactor: 1,
+          edgeInfluenceFactor: 1,
+          nonMemberInfluenceFactor: -0.8,
+          virtualEdges: true,
         });
 
         const keys = Object.keys(data.edges);
         for (let i = 0; i < keys.length; i++) {
           const key = keys[i];
-          console.log(i, colors[i]);
+          const edge = data.edges[key];
           const nodes = key.split('|#|');
           groupedNodesByCluster[key] = nodes;
           plugins.push({
             key: `bubble-sets-${key}`,
             type: 'bubble-sets',
             members: nodes,
-            // labelText: key,
-            ...createStyle(colors[i]),
+            labelText: '' + edge.keywords,
+            ...createStyle(colors[i % 10]),
           });
         }
       }
@@ -78,9 +92,9 @@ export default () => {
       plugins.push({
         type: 'tooltip',
         getContent: (e, items) => {
-          let result = `<h4>Custom Content</h4>`;
+          let result = '';
           items.forEach((item) => {
-            result += `<p>${item.data.description}</p>`;
+            result += `<h4>${item.id}</h4><p>${item.description}</p>`;
           });
           return result;
         },
@@ -94,7 +108,9 @@ export default () => {
         behaviors: ['zoom-canvas', 'drag-canvas', 'drag-element'],
         node: {
           palette: { field: 'cluster' },
-          labelText: (d) => d.label,
+          style: {
+            // labelText: d => d.id,
+          }
         },
         autoFit: 'center',
         layout: {

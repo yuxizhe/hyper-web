@@ -60,7 +60,7 @@ module.exports = {
     'max-statements': ['warn', 100], // 要求函数块最多允许的的语句数量20
     'max-nested-callbacks': ['warn', 3], // 要求回调函数最大嵌套深度3
     'max-statements-per-line': ['warn', { max: 1 }], // 要求每一行中所允许的最大语句数量
-    quotes: ['warn', 'single', 'avoid-escape'], // 要求统一使用单引号符号
+    // quotes: ['warn', 'single', 'avoid-escape'], // 要求统一使用单引号符号
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-unused-vars': 'off',
     'react/prop-types': 'off',
