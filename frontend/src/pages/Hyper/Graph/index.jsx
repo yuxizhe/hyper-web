@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Graphin } from '@antv/graphin';
 
 import hyper from './data.js'
+import { Select } from 'antd';
 
 const colors = [
   '#F6BD16',
@@ -18,15 +19,33 @@ const colors = [
 
 export default () => {
   const [data, setData] = useState(undefined);
+  const [keys, setKeys] = useState(undefined);
+  const [key, setKey] = useState(undefined);
 
   useEffect(() => {
-    fetch('http://127.0.0.1:8000/db')
+    fetch('http://127.0.0.1:8000/db/vertices')
+      .then((res) => res.json())
+      .then((data) => {
+        setKeys(data);
+      }
+      )
+    fetch('http://127.0.0.1:8000/db/vertices_neighbor/' + 'LIGHT')
       .then((res) => res.json())
       .then((data) => {
         setData(data);
       }
       )
   }, []);
+
+  useEffect(() => {
+    if (!key) return;
+    fetch('http://127.0.0.1:8000/db/vertices_neighbor/' + key)
+      .then((res) => res.json())
+      .then((data) => {
+        setData(data);
+      }
+      )
+  }, [key]);
 
   const options = useMemo(
     () => {
@@ -139,7 +158,14 @@ export default () => {
 
   if (!data) return <p>Loading...</p>;
 
-  return <Graphin options={options} id="my-graphin-demo"
+  return <>
+    选择实体：<Select onChange={setKey} style={{ width: 300 }} defaultValue={'LIGHT'} showSearch>
+      {keys.map((key) => {
+        return <Select.Option key={key} value={key} >{key}</Select.Option>
+      })}
+    </Select>
+    <Graphin options={options} id="my-graphin-demo"
     className="my-graphin-container"
-    style={{ width: '100%', height: '80vh' }} />;
+      style={{ width: '100%', height: '80vh' }} />
+  </>
 }
