@@ -19,3 +19,4 @@ CNAME
 /build
 /public
 /src/pages/Hyper/Graph/index.tsx
+/server

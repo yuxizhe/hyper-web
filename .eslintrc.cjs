@@ -19,7 +19,7 @@ module.exports = {
   plugins: ['react', '@typescript-eslint', 'prettier'],
   rules: {
     'react/react-in-jsx-scope': 'off',
-    semi: ['warn', 'never'], // 禁止尾部使用分号
+    // semi: ['warn', 'never'], // 禁止尾部使用分号
     'no-debugger': 'warn', // 禁止出现debugger
     'no-duplicate-case': 'warn', // 禁止出现重复case
     'no-empty': 'warn', // 禁止出现空语句块
