@@ -1,5 +1,5 @@
 import { MenuDataItem } from '@ant-design/pro-components'
-import { createBrowserRouter, RouteObject } from 'react-router-dom'
+import { createBrowserRouter, RouteObject, createHashRouter } from 'react-router-dom'
 import { routers } from './routers'
 
 export type RouteType = {
@@ -54,4 +54,4 @@ const reduceRoute: (params: RouteType[]) => RouteType[] = (routesParams: RouteTy
 
 const relRouters = reduceRoute(routers)
 
-export const router = createBrowserRouter(relRouters)
+export const router = createHashRouter(relRouters)

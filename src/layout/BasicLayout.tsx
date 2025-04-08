@@ -21,7 +21,7 @@ export enum ComponTypeEnum {
 export const GlobalUserInfo = React.createContext<Partial<User.UserEntity>>({})
 
 const BasicLayout: React.FC = props => {
-  const [pathname, setPathname] = useState(window.location.pathname)
+  const [pathname, setPathname] = useState(window.location.hash.replace('#', ''))
   const navigate = useNavigate()
   const location = useLocation()
   const matchRoute = matchRoutes(routers, location)
@@ -51,9 +51,9 @@ const BasicLayout: React.FC = props => {
   }
 
   useEffect(() => {
-    setPathname(window.location.pathname)
+    setPathname(window.location.hash.replace('#', ''))
     setShowLayout(!matchRoute?.[matchRoute?.length - 1]?.route?.hideLayout)
-  }, [window.location.pathname])
+  }, [window.location.hash])
 
   useAsyncEffect(async () => {
     if (pathname !== '/login') {

@@ -23,7 +23,7 @@ export const routers = [
         name: '首页',
         icon: <HomeFilled />,
         element: <Home />,
-        permissionObj: true
+        permissionObj: true,
       },
       {
         path: '/Hyper/files',
@@ -39,7 +39,7 @@ export const routers = [
         element: <Graph />
       },
       {
-        path: '/home',
+        path: '/Hyper/qa',
         name: '检索问答',
         icon: <QuestionCircleOutlined />,
         // permissionObj: true,
