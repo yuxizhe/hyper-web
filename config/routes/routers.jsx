@@ -4,7 +4,7 @@ import ErrorPage from '@/ErrorPage'
 import Home from '@/pages/Home'
 import Files from '@/pages/Hyper/Files'
 import Graph from '@/pages/Hyper/Graph'
-import { HomeFilled, SmileFilled, FileAddOutlined, QuestionCircleOutlined } from '@ant-design/icons'
+import { HomeFilled, SmileFilled, FileAddOutlined, QuestionCircleOutlined, DatabaseOutlined } from '@ant-design/icons'
 import { Navigate } from 'react-router-dom'
 
 export const routers = [
@@ -42,6 +42,13 @@ export const routers = [
         path: '/Hyper/qa',
         name: '检索问答',
         icon: <QuestionCircleOutlined />,
+        // permissionObj: true,
+        element: <Home />
+      },
+      {
+        path: '/Hyper/DB',
+        name: 'HypergraphDB',
+        icon: <DatabaseOutlined />,
         // permissionObj: true,
         element: <Home />
       },

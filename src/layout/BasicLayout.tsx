@@ -112,6 +112,7 @@ const BasicLayout: React.FC = props => {
               navigate(key || '/')
             }
           }}
+          ErrorBoundary={false}
           {...Settings}
         >
           <PageContainer>
