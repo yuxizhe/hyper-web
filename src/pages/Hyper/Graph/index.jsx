@@ -1,6 +1,23 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Graphin } from '@antv/graphin';
 
+import hyper from './data.js'
+
+const colors = [
+  '#F6BD16',
+  '#00C9C9',
+  '#F08F56',
+  '#D580FF',
+  '#FF3D00',
+  '#FF2D00',
+  '#FF1D00',
+  '#FF0D00',
+  '#FF0000',
+  '#FF0D00',
+  '#FF1D00',
+  '#FF2D00',
+  '#FF3D00',]
+
 export default () => {
   const [data, setData] = useState(undefined);
 
@@ -8,8 +25,8 @@ export default () => {
     fetch('https://assets.antv.antgroup.com/g6/collection.json')
       .then((res) => res.json())
       .then((data) => {
-        console.log('data', data);
-        setData(data);
+        console.log('data', hyper);
+        setData(hyper);
       }
       )
   }, []);
@@ -19,13 +36,19 @@ export default () => {
       let groupedNodesByCluster = {};
       let createStyle = () => ({});
 
+      let hyperData = {
+        nodes: [],
+        edges: [],
+      };
+      let plugins = [];
       if (data) {
-        groupedNodesByCluster = data.nodes.reduce((acc, node) => {
-          const cluster = node.data.cluster;
-          acc[cluster] ||= [];
-          acc[cluster].push(node.id);
-          return acc;
-        }, {});
+        for (const key in data.vertices) {
+          hyperData.nodes.push({
+            id: key,
+            label: key,
+            ...data.vertices[key],
+          });
+        }
 
         createStyle = (baseColor) => ({
           fill: baseColor,
@@ -35,56 +58,53 @@ export default () => {
           labelBackgroundFill: baseColor,
           labelBackgroundRadius: 5,
         });
+
+        const keys = Object.keys(data.edges);
+        for (let i = 0; i < keys.length; i++) {
+          const key = keys[i];
+          console.log(i, colors[i]);
+          const nodes = key.split('|#|');
+          groupedNodesByCluster[key] = nodes;
+          plugins.push({
+            key: `bubble-sets-${key}`,
+            type: 'bubble-sets',
+            members: nodes,
+            // labelText: key,
+            ...createStyle(colors[i]),
+          });
+        }
       }
+
+      plugins.push({
+        type: 'tooltip',
+        getContent: (e, items) => {
+          let result = `<h4>Custom Content</h4>`;
+          items.forEach((item) => {
+            result += `<p>${item.data.description}</p>`;
+          });
+          return result;
+        },
+      })
+
+      console.log(hyperData);
 
       return {
         autoResize: true,
-        data,
+        data: hyperData,
         behaviors: ['zoom-canvas', 'drag-canvas', 'drag-element'],
         node: {
           palette: { field: 'cluster' },
+          labelText: (d) => d.label,
         },
         autoFit: 'center',
         layout: {
           type: 'force',
           preventOverlap: true,
           linkDistance: (d) => {
-            if (d.source === 'node0' || d.target === 'node0') {
-              return 200;
-            }
-            return 80;
+            return 4;
           },
         },
-        plugins: [
-          {
-            key: 'bubble-sets-a',
-            type: 'bubble-sets',
-            members: groupedNodesByCluster['a'],
-            labelText: 'cluster-a',
-            ...createStyle('#1783FF'),
-          },
-          {
-            key: 'bubble-sets-b',
-            type: 'bubble-sets',
-            members: groupedNodesByCluster['b'],
-            labelText: 'cluster-b',
-            ...createStyle('#00C9C9'),
-          },
-          {
-            key: 'bubble-sets-c',
-            type: 'bubble-sets',
-            members: groupedNodesByCluster['c'],
-            labelText: 'cluster-c',
-            ...createStyle('#F08F56'),
-          },
-          {
-            key: 'bubble-sets-d',
-            type: 'bubble-sets',
-            members: groupedNodesByCluster['d'],
-            labelText: 'cluster-d',
-            ...createStyle('#D580FF'),
-          },
-        ],
+        plugins,
       }
     },
     [data],
