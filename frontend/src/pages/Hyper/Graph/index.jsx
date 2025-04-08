@@ -20,11 +20,10 @@ export default () => {
   const [data, setData] = useState(undefined);
 
   useEffect(() => {
-    fetch('https://assets.antv.antgroup.com/g6/collection.json')
+    fetch('http://127.0.0.1:8000/db')
       .then((res) => res.json())
       .then((data) => {
-        console.log('data', hyper);
-        setData(hyper);
+        setData(data);
       }
       )
   }, []);
@@ -105,16 +104,28 @@ export default () => {
       return {
         autoResize: true,
         data: hyperData,
-        behaviors: ['zoom-canvas', 'drag-canvas', 'drag-element'],
         node: {
           palette: { field: 'cluster' },
           style: {
             // labelText: d => d.id,
           }
         },
+        animate: false,
+        behaviors: [
+          // {
+          //   type: 'click-select',
+          //   degree: 1,
+          //   state: 'active',
+          //   unselectedState: 'inactive',
+          //   multiple: true,
+          //   trigger: ['shift'],
+          // },
+          'zoom-canvas', 'drag-canvas', 'drag-element',
+        ],
         autoFit: 'center',
         layout: {
           type: 'force',
+          // enableWorker: true,
           preventOverlap: true,
           linkDistance: (d) => {
             return 4;
