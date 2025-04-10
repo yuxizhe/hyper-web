@@ -23,13 +23,13 @@ export default () => {
   const [key, setKey] = useState(undefined);
 
   useEffect(() => {
-    fetch('http://127.0.0.1:8000/db/vertices')
+    fetch('http://127.0.0.1:8000/db/hyperedges')
       .then((res) => res.json())
       .then((data) => {
         setKeys(data);
       }
       )
-    fetch('http://127.0.0.1:8000/db/vertices_neighbor/' + 'LIGHT')
+    fetch('http://127.0.0.1:8000/db/hyperedge_neighbor/' + '二郎神|*|玉帝')
       .then((res) => res.json())
       .then((data) => {
         setData(data);
@@ -39,7 +39,7 @@ export default () => {
 
   useEffect(() => {
     if (!key) return;
-    fetch('http://127.0.0.1:8000/db/vertices_neighbor/' + key)
+    fetch('http://127.0.0.1:8000/db/hyperedge_neighbor/' + key)
       .then((res) => res.json())
       .then((data) => {
         setData(data);
@@ -73,7 +73,7 @@ export default () => {
           labelPadding: 2,
           labelBackgroundFill: baseColor,
           labelBackgroundRadius: 5,
-          labelPlacement: 'button',
+          labelPlacement: 'center',
           labelAutoRotate: false,
           // bubblesets
           maxRoutingIterations: 100,
@@ -126,7 +126,7 @@ export default () => {
         node: {
           palette: { field: 'cluster' },
           style: {
-            // labelText: d => d.id,
+            labelText: d => d.id,
           }
         },
         animate: false,
@@ -159,7 +159,7 @@ export default () => {
   if (!data) return <p>Loading...</p>;
 
   return <>
-    选择实体：<Select onChange={setKey} style={{ width: 300 }} defaultValue={'LIGHT'} showSearch>
+    选择超边：<Select onChange={setKey} style={{ width: 300 }} defaultValue={'二郎神|*|玉帝'} showSearch>
       {keys.map((key) => {
         return <Select.Option key={key} value={key} >{key}</Select.Option>
       })}
